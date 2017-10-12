@@ -1,15 +1,16 @@
 #!/bin/bash
 #all0shell.org
-cat /var/log/secure|awk '/Failed/{print $(NF-3)}'|sort|uniq -c|awk '{print $2"=" $1;}' > /tmp/hack-ssh.txt //²é¿´LinuxµÇÂ¼ÈÕÖ¾ Êä³ö
-DEFINE="10"//µÇÂ¼´íÎó10´Î
+#åŠŸèƒ½:å®žçŽ°é˜²sshæš´åŠ›ç ´è§£
+cat /var/log/secure|awk '/Failed/{print $(NF-3)}'|sort|uniq -c|awk '{print $2"=" $1;}' > /tmp/hack-ssh.txt //æŸ¥çœ‹Linuxç™»å½•æ—¥å¿— è¾“å‡º
+DEFINE="10"//ç™»å½•é”™è¯¯10æ¬¡
 for i in `cat /tmp/hack-ssh.txt`
 do 
         IP=`echo $i|awk -F= '{print $1}'`
         NUM=`echo $i|awk -F= '{print $2}'`
         if [ $NUM -gt $DEFINE ]
         then
-                grep $IP /etc/hosts.deny >/dev/null //¿´¿´ipÊÇ·ñ´æÔÚ
-                if [ $? -gt 0 ]; //Èô²»´æÔÚ£¬ÔòÖ´ÐÐÏÂÃæµÄÓï¾ä
+                grep $IP /etc/hosts.deny >/dev/null //çœ‹çœ‹ipæ˜¯å¦å­˜åœ¨
+                if [ $? -gt 0 ]; //è‹¥ä¸å­˜åœ¨ï¼Œåˆ™æ‰§è¡Œä¸‹é¢çš„è¯­å¥
                 then
                 echo "sshd:$IP" >> /etc/hosts.deny 
                 fi
